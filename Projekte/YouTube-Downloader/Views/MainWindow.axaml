@@ -1,0 +1,170 @@
+<Window
+  x:Class="YouTube_Downloader.Views.MainWindow"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:conv="clr-namespace:YouTube_Downloader.Converters"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="using:YouTube_Downloader.ViewModels"
+  Title="YouTube_Downloader"
+  Width="800"
+  Height="500"
+  x:DataType="vm:MainWindowViewModel"
+  Icon="/Assets/avalonia-logo.ico"
+  mc:Ignorable="d">
+
+  <Window.Resources>
+    <conv:ETAConverter x:Key="ETAConverter" />
+    <conv:SpeedConverter x:Key="SpeedConverter" />
+  </Window.Resources>
+
+  <Design.DataContext>
+    <vm:MainWindowViewModel />
+  </Design.DataContext>
+
+  <Grid Margin="10" RowDefinitions="Auto,*">
+    <StackPanel Grid.Row="0" Spacing="10">
+      <!--  URL Input  -->
+      <TextBox Text="{Binding Url}" Watermark="YouTube-URL..." />
+
+      <!--  File Format & Quality  -->
+      <StackPanel Orientation="Horizontal" Spacing="10">
+        <StackPanel Orientation="Horizontal" Spacing="5">
+          <TextBlock VerticalAlignment="Center" Text="Format:" />
+          <ComboBox
+            Width="100"
+            ItemsSource="{Binding Formats}"
+            SelectedItem="{Binding SelectedFormat}" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Spacing="5">
+          <TextBlock VerticalAlignment="Center" Text="Qualität:" />
+          <ComboBox
+            Width="100"
+            ItemsSource="{Binding Qualities}"
+            SelectedItem="{Binding SelectedQuality}" />
+        </StackPanel>
+      </StackPanel>
+
+      <!--  Save Location  -->
+      <Grid ColumnDefinitions="*,Auto">
+        <TextBox
+          Grid.Column="0"
+          IsReadOnly="True"
+          Text="{Binding OutputPath}"
+          Watermark="Save location..." />
+        <Button
+          Grid.Column="1"
+          Margin="10,0,0,0"
+          HorizontalAlignment="Right"
+          Command="{Binding SelectFileCommand}"
+          Content="Select Path" />
+      </Grid>
+
+      <!-- Not implemented yet
+      File Name Format
+      <Grid
+        Grid.Row="3"
+        Margin="0,10,0,0"
+        ColumnDefinitions="*,Auto">
+        <ToolTip.Tip>
+          <StackPanel Spacing="2">
+            <TextBlock FontWeight="Bold" Text="Available Variables:" />
+
+            <Separator Background="{DynamicResource ToolTipForeground}" />
+
+            <TextBlock Text="%artist% - Artist/Band" />
+            <TextBlock Text="%title% - Video Title" />
+            <TextBlock Text="%album% - Album" />
+            <TextBlock Text="%year% - Year of Publication" />
+          </StackPanel>
+        </ToolTip.Tip>
+
+        <TextBox
+          Grid.Column="0"
+          IsEnabled="{Binding #EditFormatString.IsChecked}"
+          Text="{Binding Format}" />
+        <CheckBox
+          Name="EditFormatString"
+          Grid.Column="1"
+          Margin="10,0,0,0"
+          VerticalAlignment="Center"
+          Content="Edit Format String" />
+      </Grid>-->
+
+      <!--  Download Button  -->
+      <Button
+        HorizontalAlignment="Stretch"
+        Background="Green"
+        Command="{Binding AddDownloadCommand}"
+        Content="Queue Download"
+        Foreground="White" />
+    </StackPanel>
+
+    <DataGrid
+      Grid.Row="1"
+      Margin="0,10,0,0"
+      ItemsSource="{Binding DownloadRecords}">
+      <DataGrid.Columns>
+        <DataGridTextColumn
+          Width="*"
+          Binding="{Binding Title}"
+          Header="Title" />
+        <DataGridTemplateColumn Width="Auto">
+          <DataGridTemplateColumn.HeaderTemplate>
+            <DataTemplate>
+              <TextBlock Text="Speed" />
+            </DataTemplate>
+          </DataGridTemplateColumn.HeaderTemplate>
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <TextBlock
+                Margin="12,0,12,0"
+                VerticalAlignment="Center"
+                Text="{Binding Speed, Converter={StaticResource SpeedConverter}}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn Width="Auto">
+          <DataGridTemplateColumn.HeaderTemplate>
+            <DataTemplate>
+              <TextBlock Text="ETA" />
+            </DataTemplate>
+          </DataGridTemplateColumn.HeaderTemplate>
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <TextBlock
+                Margin="12,0,12,0"
+                VerticalAlignment="Center"
+                Text="{Binding ETA, Converter={StaticResource ETAConverter}}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn Width="*">
+          <DataGridTemplateColumn.HeaderTemplate>
+            <DataTemplate>
+              <TextBlock Text="Status" />
+            </DataTemplate>
+          </DataGridTemplateColumn.HeaderTemplate>
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <ProgressBar
+                Margin="6"
+                VerticalAlignment="Stretch"
+                Maximum="100"
+                Minimum="0"
+                ShowProgressText="True"
+                Value="{Binding Status}">
+                <ProgressBar.Styles>
+                  <Style Selector="ProgressBar[Value=100]">
+                    <Setter Property="Foreground" Value="LimeGreen" />
+                  </Style>
+                </ProgressBar.Styles>
+              </ProgressBar>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+      </DataGrid.Columns>
+    </DataGrid>
+  </Grid>
+</Window>

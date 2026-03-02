@@ -1,0 +1,17 @@
+<Application
+  x:Class="YouTube_Downloader.App"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:local="using:YouTube_Downloader"
+  xmlns:semi="https://irihi.tech/semi"
+  RequestedThemeVariant="Default">
+
+  <Application.DataTemplates>
+    <local:ViewLocator />
+  </Application.DataTemplates>
+
+  <Application.Styles>
+    <semi:SemiTheme Locale="en-US" />
+    <StyleInclude Source="avares://Semi.Avalonia.DataGrid/DataGridSemiTheme.axaml" />
+  </Application.Styles>
+</Application>

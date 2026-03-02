@@ -1,0 +1,105 @@
+<Window
+  x:Class="YouTube_Downloader.Views.MainWindow"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="using:YouTube_Downloader.ViewModels"
+  Title="YouTube_Downloader"
+  Width="800"
+  Height="500"
+  d:DesignHeight="500"
+  d:DesignWidth="800"
+  x:DataType="vm:MainWindowViewModel"
+  Icon="/Assets/avalonia-logo.ico"
+  mc:Ignorable="d">
+
+  <Design.DataContext>
+    <!--
+      This only sets the DataContext for the previewer in an IDE,
+      to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs)
+    -->
+    <vm:MainWindowViewModel />
+  </Design.DataContext>
+
+  <Grid RowDefinitions="Auto,Auto,*,Auto,Auto,Auto">
+    <!--  URL Input  -->
+    <TextBox
+      Grid.Row="0"
+      Margin="10"
+      Text="{Binding Url}"
+      Watermark="Video-URL hier eingeben..." />
+
+    <!--  Format & Quality  -->
+    <StackPanel
+      Grid.Row="1"
+      Margin="10"
+      Orientation="Horizontal">
+      <TextBlock VerticalAlignment="Center" Text="Format:" />
+      <ComboBox
+        Width="100"
+        Margin="5"
+        ItemsSource="{Binding Formats}"
+        SelectedItem="{Binding SelectedFormat}" />
+
+      <TextBlock
+        Margin="10,0,0,0"
+        VerticalAlignment="Center"
+        Text="Qualität:" />
+      <ComboBox
+        Width="100"
+        Margin="5"
+        ItemsSource="{Binding Qualities}"
+        SelectedItem="{Binding SelectedQuality}" />
+    </StackPanel>
+
+    <!--  Download Log  -->
+    <TextBox
+      Grid.Row="2"
+      Height="200"
+      Margin="10"
+      AcceptsReturn="True"
+      IsReadOnly="True"
+      Text="{Binding Log}"
+      TextWrapping="Wrap" />
+
+    <!--  Download Button, Save Location & Format  -->
+    <TextBox
+      Grid.Row="3"
+      Margin="10"
+      Text="{Binding OutputPath}"
+      Watermark="Save location..." />
+    <TextBox
+      Grid.Row="4"
+      Margin="10"
+      Text="{Binding Format}"
+      Watermark="Save location..." />
+
+    <Grid
+      Grid.Row="5"
+      Margin="10"
+      ColumnDefinitions="Auto,Auto,*">
+      <Button
+        Grid.Column="0"
+        Margin="5"
+        Command="{Binding SelectFileCommand}"
+        Content="Speicherort wählen" />
+      <Button
+        Grid.Column="1"
+        Margin="5"
+        Background="Green"
+        Command="{Binding StartDownloadCommand}"
+        Content="Download starten"
+        Foreground="White" />
+      <ProgressBar
+        Grid.Column="2"
+        Height="32"
+        HorizontalAlignment="Stretch"
+        IsVisible="{Binding IsDownloading}"
+        Maximum="100"
+        Minimum="0"
+        ShowProgressText="True"
+        Value="{Binding DownloadProgress}" />
+    </Grid>
+  </Grid>
+</Window>
