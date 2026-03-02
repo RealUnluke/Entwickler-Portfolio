@@ -1,0 +1,21 @@
+<Application
+  x:Class="AdventOfCode.App"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:local="using:AdventOfCode"
+  xmlns:semi="https://irihi.tech/semi"
+  xmlns:u="https://irihi.tech/ursa"
+  xmlns:u-semi="https://irihi.tech/ursa/themes/semi"
+  RequestedThemeVariant="Light">
+  <!--  "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options.  -->
+
+  <Application.DataTemplates>
+    <local:ViewLocator />
+  </Application.DataTemplates>
+
+  <Application.Styles>
+    <semi:SemiTheme Locale="en-US" />
+    <u-semi:SemiTheme Locale="en-US" />
+    <FluentTheme />
+  </Application.Styles>
+</Application>

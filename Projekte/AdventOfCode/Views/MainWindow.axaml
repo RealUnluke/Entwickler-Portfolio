@@ -1,0 +1,152 @@
+<Window
+  x:Class="AdventOfCode.Views.MainWindow"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:u="https://irihi.tech/ursa"
+  xmlns:vm="using:AdventOfCode.ViewModels"
+  Title="AdventOfCode"
+  Width="800"
+  Height="500"
+  d:DesignHeight="500"
+  d:DesignWidth="800"
+  x:DataType="vm:MainWindowViewModel"
+  CanResize="True"
+  Icon="/Assets/avalonia-logo.ico"
+  mc:Ignorable="d">
+
+  <Design.DataContext>
+    <vm:MainWindowViewModel />
+  </Design.DataContext>
+
+  <Grid RowDefinitions="Auto,*">
+    <TabControl
+      Grid.Row="0"
+      ItemsSource="{Binding Stats}"
+      SelectedIndex="{Binding SelectedYear}"
+      SelectedItem="{Binding SelectedYearEntry}">
+      <TabControl.Styles>
+        <Style Selector="TabItem">
+          <Setter Property="FontSize" Value="16" />
+        </Style>
+        <Style Selector="TabItem:pointerover /template/ ContentPresenter">
+          <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+        <Style Selector="TabItem:selected /template/ ContentPresenter">
+          <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+      </TabControl.Styles>
+
+      <TabControl.ContentTemplate>
+        <DataTemplate />
+      </TabControl.ContentTemplate>
+    </TabControl>
+
+    <Grid Grid.Row="1" ColumnDefinitions="Auto,*">
+      <ListBox
+        Grid.Column="0"
+        Background="Transparent"
+        ItemsSource="{Binding SelectedYearEntry.Days}"
+        SelectedValue="{Binding SelectedDay}">
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <StackPanel
+              Margin="14"
+              Orientation="Horizontal"
+              Spacing="10">
+              <TextBlock
+                Name="MenuText"
+                VerticalAlignment="Center"
+                FontSize="16"
+                Text="{Binding Day}" />
+
+              <!--Not implemented yet.
+              <u:Rating
+                AllowClear="True"
+                AllowHalf="False"
+                Count="2"
+                IsEnabled="False"
+                Value="{Binding Stars}" />-->
+            </StackPanel>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+
+        <ListBox.Styles>
+          <Style Selector="ListBoxItem">
+            <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="Padding" Value="0" />
+          </Style>
+          <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+            <Setter Property="FontWeight" Value="Bold" />
+          </Style>
+        </ListBox.Styles>
+      </ListBox>
+
+      <Grid
+        Grid.Column="1"
+        Margin="20,0"
+        ColumnDefinitions="Auto,*"
+        ColumnSpacing="10"
+        RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+        RowSpacing="10">
+        <TextBlock
+          Grid.Row="0"
+          Grid.Column="0"
+          VerticalAlignment="Center"
+          Text="Input" />
+        <TextBox
+          Grid.Row="0"
+          Grid.Column="1"
+          Height="100"
+          AcceptsReturn="True"
+          FontFamily="Consolas"
+          Text="{Binding Input}"
+          TextWrapping="Wrap" />
+
+        <TextBlock
+          Grid.Row="1"
+          VerticalAlignment="Center"
+          Text="Output Part 1" />
+        <TextBox
+          Grid.Row="1"
+          Grid.Column="1"
+          FontFamily="Consolas"
+          IsReadOnly="True"
+          Text="{Binding Output1}" />
+
+        <TextBlock
+          Grid.Row="2"
+          VerticalAlignment="Center"
+          Text="Output Part 2" />
+        <TextBox
+          Grid.Row="2"
+          Grid.Column="1"
+          FontFamily="Consolas"
+          IsReadOnly="True"
+          Text="{Binding Output2}" />
+
+        <!--  Not implemented yet.
+        <u:Rating
+          Grid.Row="3"
+          Grid.Column="0"
+          Grid.ColumnSpan="2"
+          HorizontalAlignment="Center"
+          AllowClear="True"
+          AllowHalf="False"
+          Count="2"
+          Size="48"
+          Value="{Binding SelectedRating}" />-->
+
+        <Button
+          Grid.Row="4"
+          Grid.Column="0"
+          Grid.ColumnSpan="2"
+          HorizontalAlignment="Stretch"
+          HorizontalContentAlignment="Center"
+          Command="{Binding SolveCommand}"
+          Content="Solve" />
+      </Grid>
+    </Grid>
+  </Grid>
+</Window>
