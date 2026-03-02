@@ -1,0 +1,246 @@
+<UserControl
+  x:Class="UnRechnung.Views.InvoiceListView"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:conv="clr-namespace:UnRechnung.Converters"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="clr-namespace:UnRechnung.ViewModels"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  x:DataType="vm:InvoiceListViewModel"
+  mc:Ignorable="d">
+
+  <UserControl.Resources>
+    <conv:EnumToStatusConverter x:Key="EnumConverter" />
+  </UserControl.Resources>
+
+  <Design.DataContext>
+    <vm:InvoiceListViewModel />
+  </Design.DataContext>
+
+  <Grid Margin="13" RowDefinitions="Auto,Auto,*">
+    <TextBlock
+      Grid.Row="0"
+      FontSize="18"
+      FontWeight="Bold"
+      Text="Rechnungen" />
+
+    <StackPanel
+      Grid.Row="1"
+      Margin="0,13,0,0"
+      Orientation="Horizontal"
+      Spacing="13">
+      <Border
+        Width="300"
+        HorizontalAlignment="Left"
+        BorderThickness="1">
+        <Border.Styles>
+          <Style Selector="Border">
+            <Setter Property="BorderBrush" Value="#c4c4c4" />
+          </Style>
+
+          <Style Selector="Border:focus-within">
+            <Setter Property="BorderBrush" Value="Transparent" />
+          </Style>
+        </Border.Styles>
+
+        <Grid>
+          <PathIcon
+            Margin="10,0,0,0"
+            HorizontalAlignment="Left"
+            Data="{DynamicResource search_icon}"
+            Foreground="#c4c4c4"
+            ZIndex="1">
+            <PathIcon.Styles>
+              <Style Selector="Grid:pointerover PathIcon">
+                <Setter Property="RenderTransform" Value="scale(1.2)" />
+              </Style>
+            </PathIcon.Styles>
+            <PathIcon.Transitions>
+              <Transitions>
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1" />
+              </Transitions>
+            </PathIcon.Transitions>
+          </PathIcon>
+
+          <TextBox
+            Padding="40,0,0,0"
+            VerticalContentAlignment="Center"
+            BorderBrush="Transparent"
+            BorderThickness="0"
+            Classes="clearButton"
+            GotFocus="SearchInvoice_TextBox_GotFocus"
+            Text="{Binding InvoiceSearchText}"
+            Watermark="Rechnung suchen..." />
+        </Grid>
+      </Border>
+
+      <Button
+        Classes="purple"
+        Command="{Binding AddInvoiceCommand}"
+        Content="+ Neu" />
+
+      <Button CornerRadius="4">
+        <Button.Flyout>
+          <MenuFlyout Placement="RightEdgeAlignedTop">
+            <MenuItem Command="{Binding ExportInvoicesCommand}" Header="Alle Rechnungen exportieren">
+              <MenuItem.Icon>
+                <PathIcon Data="{DynamicResource export_icon}" Foreground="{DynamicResource ResourceKey=BasePurple}" />
+              </MenuItem.Icon>
+            </MenuItem>
+          </MenuFlyout>
+        </Button.Flyout>
+        <Button.Styles>
+          <Style Selector="Button:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+          </Style>
+        </Button.Styles>
+
+        <PathIcon
+          Width="4"
+          Data="{DynamicResource options_icon}"
+          Foreground="{DynamicResource ResourceKey=BasePurple}">
+          <PathIcon.Styles>
+            <Style Selector="Button:pointerover PathIcon">
+              <Setter Property="RenderTransform" Value="scale(1.2)" />
+            </Style>
+          </PathIcon.Styles>
+          <PathIcon.Transitions>
+            <Transitions>
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1" />
+            </Transitions>
+          </PathIcon.Transitions>
+        </PathIcon>
+      </Button>
+    </StackPanel>
+
+    <DataGrid
+      Grid.Row="2"
+      Margin="0,13,0,0"
+      AutoGenerateColumns="False"
+      GridLinesVisibility="All"
+      ItemsSource="{Binding TableItems}"
+      SelectedIndex="{Binding SelectedTableItemIndex}"
+      SelectionChanged="DataGrid_SelectionChanged">
+      <DataGrid.Columns>
+        <DataGridTemplateColumn Width="Auto" Header="Nr.">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <TextBlock
+                Margin="13,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                Text="{Binding InvoiceNumber}"
+                ToolTip.Tip="{Binding InvoiceNumber}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+
+        <DataGridTemplateColumn Width="*" Header="Kunde">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <TextBlock
+                Margin="13,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                Text="{Binding Customer.Name}"
+                ToolTip.Tip="{Binding Customer.Name}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+
+        <DataGridTemplateColumn Width="*" Header="Ansprechpartner">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <TextBlock
+                Margin="13,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                Text="{Binding Customer.Representative}"
+                ToolTip.Tip="{Binding Customer.Representative}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+
+        <DataGridTemplateColumn Width="Auto" Header="Rechnungsdatum">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <TextBlock
+                Margin="13,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                Text="{Binding InvoiceDate, StringFormat={}{0:dd.MM.yyyy}}"
+                ToolTip.Tip="{Binding InvoiceDate, StringFormat={}{0:dd.MM.yyyy}}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+
+        <DataGridTemplateColumn Width="Auto" Header="Zahlungsdatum">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <TextBlock
+                Margin="13,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                Text="{Binding DueDate, StringFormat={}{0:dd.MM.yyyy}}"
+                ToolTip.Tip="{Binding DueDate, StringFormat={}{0:dd.MM.yyyy}}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+
+        <DataGridTemplateColumn Width="Auto" SortMemberPath="Status">
+          <DataGridTemplateColumn.HeaderTemplate>
+            <DataTemplate>
+              <TextBlock VerticalAlignment="Center" Text="Status" />
+            </DataTemplate>
+          </DataGridTemplateColumn.HeaderTemplate>
+
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <TextBlock
+                Margin="13,0"
+                VerticalAlignment="Center"
+                Text="{Binding Status, Converter={StaticResource EnumConverter}}"
+                ToolTip.Tip="{Binding Status, Converter={StaticResource EnumConverter}}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+
+          <DataGridTemplateColumn.CellEditingTemplate>
+            <DataTemplate>
+              <ComboBox HorizontalAlignment="Stretch" SelectedIndex="{Binding Status}">
+                <ComboBoxItem Content="Offen" />
+                <ComboBoxItem Content="Bezahlt" />
+              </ComboBox>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellEditingTemplate>
+        </DataGridTemplateColumn>
+
+        <DataGridTemplateColumn
+          x:Class="numeric"
+          Width="Auto"
+          SortMemberPath="TotalAmount">
+          <DataGridTemplateColumn.HeaderTemplate>
+            <DataTemplate>
+              <TextBlock
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Text="Betrag" />
+            </DataTemplate>
+          </DataGridTemplateColumn.HeaderTemplate>
+
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <TextBlock
+                Margin="13,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Text="{Binding TotalAmount, StringFormat={}{0:C}}"
+                ToolTip.Tip="{Binding TotalAmount, StringFormat={}{0:C}}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+      </DataGrid.Columns>
+    </DataGrid>
+  </Grid>
+</UserControl>

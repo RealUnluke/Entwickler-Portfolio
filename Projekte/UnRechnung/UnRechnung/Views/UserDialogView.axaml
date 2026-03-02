@@ -1,0 +1,56 @@
+<Window
+  x:Class="UnRechnung.Views.UserDialogView"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:views="clr-namespace:UnRechnung.Views"
+  xmlns:vm="using:UnRechnung.ViewModels"
+  Title="UnRechnung"
+  Width="455"
+  Height="255"
+  d:DesignHeight="182"
+  d:DesignWidth="324"
+  x:DataType="vm:UserDialogViewModel"
+  Icon="/Assets/avalonia-logo.ico"
+  mc:Ignorable="d">
+
+  <Design.DataContext>
+    <vm:UserDialogViewModel />
+  </Design.DataContext>
+
+  <Grid RowDefinitions="Auto,*,*">
+    <TextBlock
+      Grid.Row="0"
+      Margin="13"
+      FontSize="18"
+      FontWeight="Bold"
+      Text="{Binding Title}" />
+
+    <TextBlock
+      Grid.Row="1"
+      Margin="13,0,0,13"
+      Inlines="{Binding Message}"
+      TextWrapping="Wrap" />
+
+    <StackPanel
+      Grid.Row="2"
+      Margin="13"
+      HorizontalAlignment="Right"
+      Orientation="Horizontal">
+      <Button
+        Width="70"
+        Margin="0,0,10,0"
+        Classes="purple"
+        Command="{Binding NoCommand}"
+        Content="{Binding NoText}" />
+
+      <Button
+        Width="70"
+        Classes="purple"
+        Command="{Binding YesCommand}"
+        Content="{Binding YesText}"
+        IsVisible="{Binding ShowYes}" />
+    </StackPanel>
+  </Grid>
+</Window>

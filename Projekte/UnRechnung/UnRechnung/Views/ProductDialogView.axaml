@@ -1,0 +1,85 @@
+<Window
+  x:Class="UnRechnung.Views.ProductDialogView"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:conv="clr-namespace:UnRechnung.Converters"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:views="clr-namespace:UnRechnung.Views"
+  xmlns:vm="using:UnRechnung.ViewModels"
+  Title="UnRechnung"
+  Width="455"
+  Height="610"
+  d:DesignHeight="476"
+  d:DesignWidth="324"
+  x:DataType="vm:ProductDialogViewModel"
+  Icon="/Assets/avalonia-logo.ico"
+  mc:Ignorable="d">
+
+  <Window.Resources>
+    <conv:DefaultDecimalConverter x:Key="DecimalConverter" />
+  </Window.Resources>
+
+  <Design.DataContext>
+    <vm:ProductDialogViewModel />
+  </Design.DataContext>
+
+  <Grid RowDefinitions="Auto,*,Auto">
+    <TextBlock
+      Grid.Row="0"
+      Margin="13"
+      FontSize="18"
+      FontWeight="Bold"
+      Text="{Binding DialogTitle}" />
+
+    <StackPanel
+      Grid.Row="1"
+      Margin="12"
+      Spacing="10">
+      <TextBox
+        Text="{Binding ProductPending.Name}"
+        UseFloatingWatermark="True"
+        Watermark="Name (optional)" />
+      <TextBox
+        MaxHeight="200"
+        AcceptsReturn="True"
+        Text="{Binding ProductPending.Description}"
+        TextWrapping="Wrap"
+        UseFloatingWatermark="True"
+        Watermark="Beschreibung (optional)" />
+      <TextBox
+        Text="{Binding ProductPending.Unit}"
+        UseFloatingWatermark="True"
+        Watermark="Einheit (optional)" />
+      <TextBox
+        GotFocus="SelectAll"
+        KeyDown="NumericOnly"
+        Text="{Binding ProductPending.UnitPrice, StringFormat={}{0:N2}, UpdateSourceTrigger=LostFocus, Converter={StaticResource DecimalConverter}}"
+        UseFloatingWatermark="True"
+        Watermark="Einheitspreis (€)" />
+      <TextBox
+        GotFocus="SelectAll"
+        KeyDown="NumericOnly"
+        Text="{Binding ProductPending.Taxes, StringFormat={}{0:N2}, UpdateSourceTrigger=LostFocus, Converter={StaticResource DecimalConverter}}"
+        UseFloatingWatermark="True"
+        Watermark="Steuerart (%)" />
+    </StackPanel>
+
+    <StackPanel
+      Grid.Row="2"
+      Margin="12"
+      HorizontalAlignment="Right"
+      Orientation="Horizontal"
+      Spacing="10">
+      <Button
+        Classes="purple"
+        Command="{Binding SaveChangesCommand}"
+        Content="Speichern" />
+
+      <Button
+        Classes="purple"
+        Command="{Binding AbortChangesCommand}"
+        Content="Abbrechen" />
+    </StackPanel>
+  </Grid>
+</Window>

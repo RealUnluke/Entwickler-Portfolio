@@ -1,0 +1,387 @@
+<UserControl
+  x:Class="UnRechnung.Views.SettingsView"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="clr-namespace:UnRechnung.ViewModels"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  x:DataType="vm:SettingsViewModel"
+  mc:Ignorable="d">
+
+  <Design.DataContext>
+    <vm:SettingsViewModel />
+  </Design.DataContext>
+
+  <Grid Margin="13" RowDefinitions="Auto,*">
+    <TextBlock
+      Grid.Row="0"
+      FontSize="18"
+      FontWeight="Bold"
+      Text="Einstellungen" />
+
+    <TabControl Grid.Row="1" Margin="-10,0,0,0">
+      <TabItem FontSize="16" Header="Allgemein">
+        <ScrollViewer>
+          <StackPanel Margin="0,13,0,0" Spacing="13">
+            <Button
+              Margin="6,0,0,0"
+              Classes="purple"
+              Command="{Binding SaveConfigCommand}"
+              Content="Speichern"
+              IsEnabled="{Binding HasUnsavedChanges}" />
+
+            <Expander Header="Firma" IsExpanded="True">
+              <Expander.Styles>
+                <Style Selector="Expander:expanded">
+                  <Setter Property="HorizontalAlignment" Value="Stretch" />
+                </Style>
+                <Style Selector="Expander:collapsed /template/ ContentPresenter">
+                  <Setter Property="HorizontalAlignment" Value="Left" />
+                </Style>
+              </Expander.Styles>
+
+              <Grid ColumnDefinitions="2*,*" RowDefinitions="Auto,Auto,Auto,Auto">
+                <TextBox
+                  Grid.Row="0"
+                  Grid.Column="0"
+                  Margin="0,0,0,5"
+                  Text="{Binding CompanyConfig.Name}"
+                  UseFloatingWatermark="True"
+                  Watermark="Name" />
+                <TextBox
+                  Grid.Row="1"
+                  Margin="0,0,0,5"
+                  Text="{Binding CompanyConfig.Street}"
+                  UseFloatingWatermark="True"
+                  Watermark="Straße" />
+                <TextBox
+                  Grid.Row="2"
+                  Margin="0,0,0,5"
+                  Text="{Binding CompanyConfig.AddressComplement}"
+                  UseFloatingWatermark="True"
+                  Watermark="Adresszusatz (optional)" />
+                <Grid Grid.Row="3" ColumnDefinitions="Auto,*">
+                  <TextBox
+                    Grid.Column="0"
+                    Text="{Binding CompanyConfig.PostalCode}"
+                    UseFloatingWatermark="True"
+                    Watermark="PLZ" />
+                  <TextBox
+                    Grid.Column="1"
+                    Margin="5,0,0,0"
+                    Text="{Binding CompanyConfig.City}"
+                    UseFloatingWatermark="True"
+                    Watermark="Ort" />
+                </Grid>
+
+                <StackPanel
+                  Grid.Row="0"
+                  Grid.RowSpan="4"
+                  Grid.Column="1"
+                  VerticalAlignment="Center">
+                  <Panel>
+                    <PathIcon
+                      Width="100"
+                      Height="100"
+                      Data="{DynamicResource missingImage_icon}"
+                      Foreground="#c4c4c4"
+                      IsVisible="{Binding IsLogoMissing}" />
+                    <Image
+                      MaxWidth="100"
+                      MaxHeight="100"
+                      Source="{Binding CompanyLogo}" />
+                  </Panel>
+
+                  <Button
+                    Width="130"
+                    Margin="0,5,0,0"
+                    HorizontalAlignment="Center"
+                    Classes="purple"
+                    Command="{Binding ChoseLogoPathCommand}"
+                    Content="{Binding AddLogoButtonText}" />
+                </StackPanel>
+              </Grid>
+            </Expander>
+
+            <Expander Header="Theme" IsExpanded="True">
+              <Expander.Styles>
+                <Style Selector="Expander:expanded">
+                  <Setter Property="HorizontalAlignment" Value="Stretch" />
+                </Style>
+                <Style Selector="Expander:collapsed /template/ ContentPresenter">
+                  <Setter Property="HorizontalAlignment" Value="Left" />
+                </Style>
+              </Expander.Styles>
+
+              <ListBox SelectedIndex="{Binding SelectedThemeIndex}" SelectionMode="AlwaysSelected">
+                <ListBox.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" Spacing="13" />
+                  </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+
+                <ListBoxItem Width="50">
+                  <PathIcon
+                    Width="23"
+                    Data="{DynamicResource sun_icon}"
+                    Foreground="{Binding ThemeIconColor}" />
+                </ListBoxItem>
+                <ListBoxItem Width="50">
+                  <PathIcon
+                    Width="23"
+                    Data="{DynamicResource moon_icon}"
+                    Foreground="{Binding ThemeIconColor}" />
+                </ListBoxItem>
+              </ListBox>
+            </Expander>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+
+      <TabItem FontSize="16" Header="Nummernkreise">
+        <ScrollViewer>
+          <StackPanel Margin="0,13,0,0">
+            <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto,*" RowDefinitions="Auto,Auto,Auto">
+              <TextBlock
+                Grid.Row="0"
+                Grid.Column="0"
+                Margin="0,0,13,13"
+                FontWeight="Bold"
+                Foreground="{DynamicResource ResourceKey=BasePurple}"
+                Text="Nummernkreis" />
+              <TextBlock
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="0,0,13,13"
+                FontWeight="Bold"
+                Foreground="{DynamicResource ResourceKey=BasePurple}"
+                Text="Präfix" />
+              <TextBlock
+                Grid.Row="0"
+                Grid.Column="2"
+                Margin="0,0,13,13"
+                FontWeight="Bold"
+                Foreground="{DynamicResource ResourceKey=BasePurple}"
+                Text="Format" />
+              <TextBlock
+                Grid.Row="0"
+                Grid.Column="3"
+                Margin="0,0,13,13"
+                FontWeight="Bold"
+                Foreground="{DynamicResource ResourceKey=BasePurple}"
+                Text="Nächster Wert" />
+              <TextBlock
+                Grid.Row="0"
+                Grid.Column="4"
+                Margin="0,0,13,13"
+                FontWeight="Bold"
+                Foreground="{DynamicResource ResourceKey=BasePurple}"
+                Text="Mindestlänge" />
+              <TextBlock
+                Grid.Row="0"
+                Grid.Column="5"
+                Margin="0,0,13,13"
+                FontWeight="Bold"
+                Foreground="{DynamicResource ResourceKey=BasePurple}"
+                Text="Vorschau" />
+
+              <TextBlock
+                Grid.Row="1"
+                Grid.Column="0"
+                Margin="0,0,13,0"
+                VerticalAlignment="Center"
+                Text="Rechnungsnummern" />
+              <TextBox
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="0,0,13,0"
+                Text="{Binding InvoiceNumberRangePrefix}"
+                Watermark="RE" />
+              <TextBox
+                Grid.Row="1"
+                Grid.Column="2"
+                Margin="0,0,13,0"
+                Text="{Binding InvoiceNumberRangeFormat}"
+                Watermark="-{yyyy}-{mm}-" />
+              <TextBox
+                Grid.Row="1"
+                Grid.Column="3"
+                Margin="0,0,13,0"
+                Text="{Binding InvoiceNumberRangeNextNumber}"
+                TextAlignment="Right"
+                Watermark="1" />
+              <ComboBox
+                Grid.Row="1"
+                Grid.Column="4"
+                Margin="0,0,13,0"
+                SelectedIndex="{Binding MinLengthIndex}">
+                <ComboBoxItem Content="3-stellig" />
+                <ComboBoxItem Content="4-stellig" />
+                <ComboBoxItem Content="5-stellig" />
+                <ComboBoxItem Content="6-stellig" />
+              </ComboBox>
+              <TextBlock
+                Grid.Row="1"
+                Grid.Column="5"
+                Margin="0,0,13,0"
+                VerticalAlignment="Center"
+                Foreground="#c4c4c4"
+                Text="{Binding InvoiceNumberPreview}" />
+
+              <TextBlock
+                Grid.Row="2"
+                Grid.Column="0"
+                Margin="0,13,13,0"
+                VerticalAlignment="Center"
+                Text="Kundennummern" />
+              <TextBlock
+                Grid.Row="2"
+                Grid.Column="1"
+                Grid.ColumnSpan="2"
+                Margin="0,13,13,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Foreground="#c4c4c4"
+                Text="(Nur von 10.000 bis 69.999)" />
+              <TextBox
+                Grid.Row="2"
+                Grid.Column="3"
+                Margin="0,13,13,0"
+                Text="{Binding CustomerNumberRange.NextNumber}"
+                TextAlignment="Right"
+                Watermark="10001" />
+            </Grid>
+
+            <Grid ColumnDefinitions="*,*">
+              <Grid
+                Margin="0,39,0,0"
+                ColumnDefinitions="Auto,*,*"
+                RowDefinitions="*,*,*,*,*,*,*">
+                <TextBlock
+                  Grid.Row="0"
+                  Grid.Column="0"
+                  Margin="0,0,13,13"
+                  FontWeight="Bold"
+                  Foreground="{DynamicResource ResourceKey=BasePurple}"
+                  Text="Eingabe" />
+                <TextBlock
+                  Grid.Row="0"
+                  Grid.Column="1"
+                  Margin="0,0,13,13"
+                  FontWeight="Bold"
+                  Foreground="{DynamicResource ResourceKey=BasePurple}"
+                  Text="Beschreibung" />
+                <TextBlock
+                  Grid.Row="0"
+                  Grid.Column="2"
+                  Margin="0,0,13,13"
+                  FontWeight="Bold"
+                  Foreground="{DynamicResource ResourceKey=BasePurple}"
+                  Text="Beispiel" />
+
+
+                <TextBlock
+                  Grid.Row="1"
+                  Grid.Column="0"
+                  Margin="0,0,0,13"
+                  Text="\{yyyy\}" />
+                <TextBlock
+                  Grid.Row="1"
+                  Grid.Column="1"
+                  Margin="0,0,0,13"
+                  Text="Jahreszahl: vollständig" />
+                <TextBlock
+                  Grid.Row="1"
+                  Grid.Column="2"
+                  Margin="0,0,0,13"
+                  Text="2025" />
+
+                <TextBlock
+                  Grid.Row="2"
+                  Grid.Column="0"
+                  Margin="0,0,0,13"
+                  Text="\{yy\}" />
+                <TextBlock
+                  Grid.Row="2"
+                  Grid.Column="1"
+                  Margin="0,0,0,13"
+                  Text="Jahreszahl: kurz" />
+                <TextBlock
+                  Grid.Row="2"
+                  Grid.Column="2"
+                  Margin="0,0,0,13"
+                  Text="25" />
+
+                <TextBlock
+                  Grid.Row="3"
+                  Grid.Column="0"
+                  Margin="0,0,0,13"
+                  Text="\{mm\}" />
+                <TextBlock
+                  Grid.Row="3"
+                  Grid.Column="1"
+                  Margin="0,0,0,13"
+                  Text="Monatszahl: zweistellig" />
+                <TextBlock
+                  Grid.Row="3"
+                  Grid.Column="2"
+                  Margin="0,0,0,13"
+                  Text="07" />
+
+                <TextBlock
+                  Grid.Row="4"
+                  Grid.Column="0"
+                  Margin="0,0,0,13"
+                  Text="\{m\}" />
+                <TextBlock
+                  Grid.Row="4"
+                  Grid.Column="1"
+                  Margin="0,0,0,13"
+                  Text="Monatszahl: einstellig" />
+                <TextBlock
+                  Grid.Row="4"
+                  Grid.Column="2"
+                  Margin="0,0,0,13"
+                  Text="7" />
+
+                <TextBlock
+                  Grid.Row="5"
+                  Grid.Column="0"
+                  Margin="0,0,0,13"
+                  Text="\{dd\}" />
+                <TextBlock
+                  Grid.Row="5"
+                  Grid.Column="1"
+                  Margin="0,0,0,13"
+                  Text="Tageszahl: zweistellig" />
+                <TextBlock
+                  Grid.Row="5"
+                  Grid.Column="2"
+                  Margin="0,0,0,13"
+                  Text="01" />
+
+                <TextBlock
+                  Grid.Row="6"
+                  Grid.Column="0"
+                  Margin="0,0,0,13"
+                  Text="\{d\}" />
+                <TextBlock
+                  Grid.Row="6"
+                  Grid.Column="1"
+                  Margin="0,0,0,13"
+                  Text="Tageszahl: einstellig" />
+                <TextBlock
+                  Grid.Row="6"
+                  Grid.Column="2"
+                  Margin="0,0,0,13"
+                  Text="1" />
+              </Grid>
+            </Grid>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+    </TabControl>
+  </Grid>
+</UserControl>

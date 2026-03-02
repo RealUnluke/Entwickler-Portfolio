@@ -1,0 +1,114 @@
+<Window
+  x:Class="UnRechnung.Views.MainWindow"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:views="clr-namespace:UnRechnung.Views"
+  xmlns:vm="using:UnRechnung.ViewModels"
+  Title="UnRechnung"
+  Width="1440"
+  Height="810"
+  d:DesignHeight="576"
+  d:DesignWidth="1024"
+  x:DataType="vm:MainWindowViewModel"
+  Icon="/Assets/avalonia-logo.ico"
+  mc:Ignorable="d">
+
+  <Design.DataContext>
+    <vm:MainWindowViewModel />
+  </Design.DataContext>
+
+  <Grid ColumnDefinitions="Auto,*">
+    <Panel
+      Grid.ColumnSpan="2"
+      Background="#8000"
+      IsVisible="{Binding NavigationHost.IsDeemphasized}"
+      ZIndex="1" />
+
+    <Panel Grid.Column="0" Background="{DynamicResource ResourceKey=BasePurple}">
+      <StackPanel Orientation="Vertical" Spacing="7">
+        <TextBlock
+          Margin="5"
+          FontFamily="Arial"
+          FontSize="32"
+          FontWeight="Bold"
+          Foreground="White"
+          Text="UnRechnung" />
+
+        <ListBox Background="Transparent" SelectedIndex="{Binding CurrentPage}">
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock
+                Name="MenuText"
+                Margin="20,0,0,0"
+                Padding="5"
+                VerticalAlignment="Center"
+                FontFamily="Arial"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="White"
+                Text="{Binding}" />
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+
+          <ListBox.Styles>
+            <Style Selector="ListBoxItem">
+              <Setter Property="Background" Value="Transparent" />
+              <Setter Property="Padding" Value="0" />
+            </Style>
+            <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+              <Setter Property="Background" Value="{DynamicResource ResourceKey=FocusPurple}" />
+              <Setter Property="Padding" Value="10,0,0,0" />
+            </Style>
+            <Style Selector="ListBoxItem:pointerover:not(:selected) /template/ ContentPresenter">
+              <Setter Property="Background" Value="{DynamicResource ResourceKey=FocusPurple}" />
+              <Setter Property="Padding" Value="10,0,0,0" />
+
+              <Style.Animations>
+                <Animation Duration="0:0:0.2">
+                  <KeyFrame Cue="0%">
+                    <Setter Property="Padding" Value="0" />
+                  </KeyFrame>
+                  <KeyFrame Cue="100%">
+                    <Setter Property="Padding" Value="10,0,0,0" />
+                  </KeyFrame>
+                </Animation>
+              </Style.Animations>
+            </Style>
+          </ListBox.Styles>
+
+          <x:String>Dashboard</x:String>
+          <x:String>Produkte</x:String>
+          <x:String>Kunden</x:String>
+          <x:String>Rechnungen</x:String>
+          <x:String>Einstellungen</x:String>
+        </ListBox>
+      </StackPanel>
+    </Panel>
+
+    <TransitioningContentControl Grid.Column="1" Content="{Binding NavigationHost.CurrentPage}">
+      <TransitioningContentControl.PageTransition>
+        <CrossFade Duration="0:00:00.250" />
+      </TransitioningContentControl.PageTransition>
+    </TransitioningContentControl>
+
+    <ItemsControl
+      Grid.ColumnSpan="2"
+      HorizontalAlignment="Right"
+      VerticalAlignment="Bottom"
+      ItemsSource="{Binding SnackbarNotifications}">
+      <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+          <StackPanel Orientation="Vertical" />
+        </ItemsPanelTemplate>
+      </ItemsControl.ItemsPanel>
+
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <views:SnackbarView />
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+  </Grid>
+</Window>

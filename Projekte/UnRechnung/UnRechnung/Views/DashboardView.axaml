@@ -1,0 +1,265 @@
+<UserControl
+  x:Class="UnRechnung.Views.DashboardView"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="clr-namespace:UnRechnung.ViewModels"
+  d:DesignHeight="900"
+  d:DesignWidth="1600"
+  x:DataType="vm:DashboardViewModel"
+  mc:Ignorable="d">
+
+  <Design.DataContext>
+    <vm:DashboardViewModel />
+  </Design.DataContext>
+
+  <ScrollViewer>
+    <Grid Margin="13" RowDefinitions="Auto,*">
+      <TextBlock
+        Grid.Row="0"
+        FontSize="18"
+        FontWeight="Bold"
+        Text="Dashboard" />
+
+      <Grid
+        Grid.Row="1"
+        Margin="0,13,0,0"
+        ColumnDefinitions="*,Auto"
+        RowDefinitions="Auto,Auto,5*">
+        <Border
+          Grid.Row="0"
+          Grid.RowSpan="2"
+          Grid.Column="0"
+          Classes="dashboardFrame">
+          <Grid RowDefinitions="Auto,Auto,Auto,*">
+            <Button
+              Grid.Row="0"
+              Classes="purple"
+              Command="{Binding NewInvoiceCommand}"
+              Content="Neue Rechnung" />
+
+            <ComboBox
+              Grid.Row="0"
+              HorizontalAlignment="Right"
+              SelectedIndex="{Binding SelectedYear}">
+              <ComboBoxItem Content="Letztes Jahr" />
+              <ComboBoxItem Content="Aktuelles Jahr" />
+            </ComboBox>
+
+            <TextBlock
+              Grid.Row="1"
+              Margin="0,26,0,0"
+              HorizontalAlignment="Right"
+              Text="Gesamteinnahmen" />
+
+            <TextBlock
+              Grid.Row="2"
+              HorizontalAlignment="Right"
+              FontSize="30"
+              Text="{Binding TotalIncome, StringFormat={}{0:C}}" />
+
+            <lvc:CartesianChart
+              Grid.Row="3"
+              Margin="0,26,0,0"
+              LegendPosition="Bottom"
+              Series="{Binding Series}"
+              XAxes="{Binding XAxes}"
+              YAxes="{Binding YAxes}" />
+          </Grid>
+        </Border>
+
+        <Border
+          Grid.Row="0"
+          Grid.Column="1"
+          Margin="13,0,0,0"
+          Classes="dashboardFrame">
+          <Calendar HorizontalAlignment="Stretch" FontSize="16" />
+        </Border>
+
+        <Grid
+          Grid.Row="1"
+          Grid.Column="1"
+          Margin="13,13,0,0"
+          ColumnDefinitions="*,*"
+          RowDefinitions="*,*">
+          <Border
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="0,0,0,6.5"
+            Classes="dashboardFrame">
+            <Grid ColumnDefinitions="Auto,*" RowDefinitions="*,*">
+              <PathIcon
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                Grid.Column="0"
+                Width="40"
+                Height="40"
+                Margin="0,0,13,0"
+                Data="{DynamicResource invoice_icon}"
+                Foreground="{DynamicResource BasePurple}" />
+
+              <TextBlock
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="0,0,0,6.5"
+                FontSize="20"
+                FontWeight="Bold"
+                Text="{Binding InvoiceCount, StringFormat=0:d}" />
+
+              <TextBlock
+                Grid.Row="1"
+                Grid.Column="1"
+                FontSize="14"
+                Text="Rechnungen" />
+            </Grid>
+          </Border>
+
+          <Border
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="0,6.5,6.5,0"
+            Classes="dashboardFrame">
+            <Grid ColumnDefinitions="Auto,*" RowDefinitions="*,*">
+              <PathIcon
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                Grid.Column="0"
+                Width="40"
+                Height="40"
+                Margin="0,0,13,0"
+                Data="{DynamicResource customer_icon}"
+                Foreground="{DynamicResource BasePurple}" />
+
+              <TextBlock
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="0,0,0,6.5"
+                FontSize="20"
+                FontWeight="Bold"
+                Text="{Binding CustomerCount}" />
+
+              <TextBlock
+                Grid.Row="1"
+                Grid.Column="1"
+                FontSize="14"
+                Text="Kunden" />
+            </Grid>
+          </Border>
+
+          <Border
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="6.5,6.5,0,0"
+            Classes="dashboardFrame">
+            <Grid ColumnDefinitions="Auto,*" RowDefinitions="*,*">
+              <PathIcon
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                Grid.Column="0"
+                Width="40"
+                Height="40"
+                Margin="0,0,13,0"
+                Data="{DynamicResource product_icon}"
+                Foreground="{DynamicResource BasePurple}" />
+
+              <TextBlock
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="0,0,0,6.5"
+                FontSize="20"
+                FontWeight="Bold"
+                Text="{Binding ProductCount}" />
+
+              <TextBlock
+                Grid.Row="1"
+                Grid.Column="1"
+                FontSize="14"
+                Text="Produkte" />
+            </Grid>
+          </Border>
+        </Grid>
+
+        <Border
+          Grid.Row="2"
+          Grid.Column="0"
+          Grid.ColumnSpan="2"
+          Margin="0,13,0,0"
+          Classes="dashboardFrame">
+          <Grid RowDefinitions="Auto,*">
+            <TextBlock
+              Grid.Row="0"
+              Margin="0,0,0,13"
+              FontSize="16"
+              FontWeight="Bold"
+              Text="Offene Rechnungen" />
+
+            <DataGrid
+              Grid.Row="1"
+              AutoGenerateColumns="False"
+              GridLinesVisibility="All"
+              ItemsSource="{Binding OpenInvoices}">
+              <DataGrid.Columns>
+                <DataGridTextColumn
+                  Width="Auto"
+                  Binding="{Binding InvoiceNumber}"
+                  Header="Nr."
+                  IsReadOnly="True" />
+
+                <DataGridTextColumn
+                  Width="*"
+                  Binding="{Binding Customer.Name}"
+                  Header="Kunde"
+                  IsReadOnly="True" />
+
+                <DataGridTextColumn
+                  Width="*"
+                  Binding="{Binding Customer.Representative}"
+                  Header="Ansprechpartner"
+                  IsReadOnly="True" />
+
+                <DataGridTextColumn
+                  Width="Auto"
+                  Binding="{Binding InvoiceDate, StringFormat={}{0:dd.MM.yyyy}}"
+                  Header="Rechnungsdatum"
+                  IsReadOnly="True" />
+
+                <DataGridTextColumn
+                  Width="Auto"
+                  Binding="{Binding DueDate, StringFormat={}{0:dd.MM.yyyy}}"
+                  Header="Zahlungsdatum"
+                  IsReadOnly="True" />
+
+                <DataGridTemplateColumn
+                  x:Class="numeric"
+                  Width="Auto"
+                  SortMemberPath="TotalAmount">
+                  <DataGridTemplateColumn.HeaderTemplate>
+                    <DataTemplate>
+                      <TextBlock
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Text="Betrag" />
+                    </DataTemplate>
+                  </DataGridTemplateColumn.HeaderTemplate>
+
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <TextBlock
+                        Margin="13,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Text="{Binding TotalAmount, StringFormat={}{0:C}}" />
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+              </DataGrid.Columns>
+            </DataGrid>
+          </Grid>
+        </Border>
+      </Grid>
+    </Grid>
+  </ScrollViewer>
+</UserControl>

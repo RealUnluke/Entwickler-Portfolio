@@ -1,0 +1,99 @@
+<UserControl
+  x:Class="UnRechnung.Views.SnackbarView"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:views="clr-namespace:UnRechnung.Views"
+  xmlns:vm="using:UnRechnung.ViewModels"
+  d:DesignHeight="100"
+  d:DesignWidth="400"
+  x:DataType="vm:SnackbarViewModel"
+  mc:Ignorable="d">
+
+  <Border
+    Name="SnackBorder"
+    MinHeight="60"
+    MaxWidth="480"
+    Margin="13"
+    HorizontalAlignment="Right"
+    VerticalAlignment="Bottom"
+    Background="{Binding SnackbarBackground}"
+    BoxShadow="5 5 5 0 #5000"
+    Classes.hide="{Binding IsHidden}"
+    ClipToBounds="True"
+    CornerRadius="10">
+    <Border.Styles>
+      <Style Selector="Border.hide">
+        <Setter Property="Opacity" Value="0" />
+        <Setter Property="RenderTransform" Value="translateX(500px)" />
+      </Style>
+
+      <Style Selector="Border:not(.hide)">
+        <Setter Property="Opacity" Value="1" />
+        <Setter Property="RenderTransform" Value="translateX(0px)" />
+      </Style>
+    </Border.Styles>
+
+    <Border.Transitions>
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.3" />
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.3" />
+      </Transitions>
+    </Border.Transitions>
+
+    <Grid RowDefinitions="*,Auto">
+      <Grid
+        Grid.Row="0"
+        Margin="13,13,13,11"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Center"
+        ColumnDefinitions="Auto,*,Auto"
+        RowDefinitions="*,Auto">
+        <PathIcon
+          Grid.Row="0"
+          Grid.Column="0"
+          Data="{Binding SnackbarIcon}"
+          Foreground="{Binding SnackbarForeground}" />
+
+        <TextBlock
+          Grid.Row="0"
+          Grid.Column="1"
+          Margin="13,0"
+          VerticalAlignment="Center"
+          FontWeight="Bold"
+          Foreground="{Binding SnackbarForeground}"
+          Text="{Binding Message}"
+          TextWrapping="Wrap" />
+
+        <Button
+          Grid.Row="0"
+          Grid.Column="2"
+          Background="Transparent"
+          Command="{Binding CloseCommand}"
+          CommandParameter="{Binding}">
+          <PathIcon
+            Width="10"
+            Data="{DynamicResource ResourceKey=cross_thick_icon}"
+            Foreground="{Binding SnackbarForeground}" />
+        </Button>
+      </Grid>
+
+      <ProgressBar
+        Grid.Row="1"
+        Height="5"
+        Background="Transparent"
+        CornerRadius="0"
+        Foreground="{Binding SnackbarForeground}"
+        Maximum="{Binding SnackbarProgressMax}"
+        Minimum="0"
+        Value="{Binding SnackbarProgress}">
+        <ProgressBar.Transitions>
+          <Transitions>
+            <DoubleTransition Property="Value" Duration="0:0:1" />
+          </Transitions>
+        </ProgressBar.Transitions>
+      </ProgressBar>
+    </Grid>
+  </Border>
+</UserControl>

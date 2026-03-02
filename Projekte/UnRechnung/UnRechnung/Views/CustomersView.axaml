@@ -1,0 +1,174 @@
+<UserControl
+  x:Class="UnRechnung.Views.CustomersView"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="clr-namespace:UnRechnung.ViewModels"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  x:DataType="vm:CustomersViewModel"
+  mc:Ignorable="d">
+
+  <Design.DataContext>
+    <vm:CustomersViewModel />
+  </Design.DataContext>
+
+  <Grid Margin="13" RowDefinitions="Auto,Auto,*">
+    <TextBlock
+      Grid.Row="0"
+      FontSize="18"
+      FontWeight="Bold"
+      Text="Kunden" />
+
+    <StackPanel
+      Grid.Row="1"
+      Margin="0,13,0,0"
+      Orientation="Horizontal"
+      Spacing="13">
+      <Border
+        Width="300"
+        HorizontalAlignment="Left"
+        BorderThickness="1">
+        <Border.Styles>
+          <Style Selector="Border">
+            <Setter Property="BorderBrush" Value="#c4c4c4" />
+          </Style>
+
+          <Style Selector="Border:focus-within">
+            <Setter Property="BorderBrush" Value="Transparent" />
+          </Style>
+        </Border.Styles>
+
+        <Grid>
+          <PathIcon
+            Margin="10,0,0,0"
+            HorizontalAlignment="Left"
+            Data="{DynamicResource search_icon}"
+            Foreground="#c4c4c4"
+            ZIndex="1">
+            <PathIcon.Styles>
+              <Style Selector="Grid:pointerover PathIcon">
+                <Setter Property="RenderTransform" Value="scale(1.2)" />
+              </Style>
+            </PathIcon.Styles>
+            <PathIcon.Transitions>
+              <Transitions>
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1" />
+              </Transitions>
+            </PathIcon.Transitions>
+          </PathIcon>
+          <TextBox
+            Padding="40,0,0,0"
+            VerticalContentAlignment="Center"
+            BorderBrush="Transparent"
+            BorderThickness="0"
+            Classes="clearButton"
+            GotFocus="SearchCustomer_TextBox_GotFocus"
+            Text="{Binding CustomerSearchText}"
+            Watermark="Kunde suchen..." />
+        </Grid>
+      </Border>
+
+      <Button
+        Classes="purple"
+        Command="{Binding AddCustomerCommand}"
+        Content="+ Neu" />
+
+      <Button CornerRadius="4">
+        <Button.Flyout>
+          <MenuFlyout Placement="RightEdgeAlignedTop">
+            <MenuItem Command="{Binding ImportCustomersCommand}" Header="Kunden importieren">
+              <MenuItem.Icon>
+                <PathIcon Data="{DynamicResource import_icon}" Foreground="{DynamicResource ResourceKey=BasePurple}" />
+              </MenuItem.Icon>
+            </MenuItem>
+
+            <MenuItem Command="{Binding ExportCustomersCommand}" Header="Alle Kunden exportieren">
+              <MenuItem.Icon>
+                <PathIcon Data="{DynamicResource export_icon}" Foreground="{DynamicResource ResourceKey=BasePurple}" />
+              </MenuItem.Icon>
+            </MenuItem>
+          </MenuFlyout>
+        </Button.Flyout>
+        <Button.Styles>
+          <Style Selector="Button:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+          </Style>
+        </Button.Styles>
+
+        <PathIcon
+          Width="4"
+          Data="{DynamicResource options_icon}"
+          Foreground="{DynamicResource ResourceKey=BasePurple}">
+          <PathIcon.Styles>
+            <Style Selector="Button:pointerover PathIcon">
+              <Setter Property="RenderTransform" Value="scale(1.2)" />
+            </Style>
+          </PathIcon.Styles>
+          <PathIcon.Transitions>
+            <Transitions>
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1" />
+            </Transitions>
+          </PathIcon.Transitions>
+        </PathIcon>
+      </Button>
+    </StackPanel>
+
+    <DataGrid
+      Grid.Row="2"
+      Margin="0,13,0,0"
+      AutoGenerateColumns="False"
+      GridLinesVisibility="All"
+      ItemsSource="{Binding TableItems}"
+      SelectedIndex="{Binding SelectedTableItemIndex}"
+      SelectionChanged="DataGrid_SelectionChanged">
+      <DataGrid.Columns>
+        <DataGridTextColumn
+          Width="Auto"
+          Binding="{Binding CustomerNumber}"
+          Header="Nr." />
+        <DataGridTextColumn
+          Width="*"
+          Binding="{Binding Name}"
+          Header="Kunde" />
+        <DataGridTextColumn
+          Width="Auto"
+          Binding="{Binding Representative, Mode=TwoWay}"
+          Header="Ansprechpartner" />
+        <DataGridTextColumn
+          Width="Auto"
+          Binding="{Binding Email}"
+          Header="E-Mail" />
+        <DataGridTextColumn
+          Width="Auto"
+          Binding="{Binding Street}"
+          Header="Straße" />
+        <DataGridTextColumn
+          Width="Auto"
+          Binding="{Binding City}"
+          Header="Ort" />
+        <DataGridTemplateColumn>
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <Button
+                Classes="edit"
+                Command="{Binding ((vm:CustomersViewModel)DataContext).EditItemCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                CommandParameter="{Binding}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn>
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <Button
+                Classes="delete"
+                Command="{Binding ((vm:CustomersViewModel)DataContext).RemoveItemCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                CommandParameter="{Binding}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+      </DataGrid.Columns>
+    </DataGrid>
+  </Grid>
+</UserControl>

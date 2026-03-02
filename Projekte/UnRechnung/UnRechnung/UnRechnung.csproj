@@ -1,0 +1,85 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Remove="Models\InvoicePosition.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Remove="Resources\de_postalcodes.csv" />
+    <None Remove="Resources\Fonts\ARIAL.TTF" />
+    <None Remove="Resources\Fonts\ARIALBD.TTF" />
+    <None Remove="Resources\Fonts\ARIALBI.TTF" />
+    <None Remove="Resources\Fonts\ARIALI.TTF" />
+    <None Remove="Resources\Fonts\ARIBLK.TTF" />
+    <None Remove="Resources\Fonts\cour.ttf" />
+    <None Remove="Resources\Fonts\courbd.ttf" />
+    <None Remove="Resources\Fonts\courbi.ttf" />
+    <None Remove="Resources\Fonts\couri.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" />
+    <PackageReference Include="Avalonia.Themes.Fluent" />
+    <PackageReference Include="Avalonia.Fonts.Inter" />
+    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+    <PackageReference Include="Avalonia.Diagnostics">
+      <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+      <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="CsvHelper" />
+    <PackageReference Include="Docnet.Core" />
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" />
+    <PackageReference Include="Microsoft.Data.Sqlite" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="PDFsharp-MigraDoc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\DashboardView.axaml.cs">
+      <DependentUpon>DashboardView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\CustomersView.axaml.cs">
+      <DependentUpon>CustomersView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ProductsViewModel.axaml.cs">
+      <DependentUpon>ProductsViewModel.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\de_postalcodes.csv">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Fonts\ARIAL.TTF" />
+    <EmbeddedResource Include="Resources\Fonts\ARIALBD.TTF" />
+    <EmbeddedResource Include="Resources\Fonts\ARIALBI.TTF" />
+    <EmbeddedResource Include="Resources\Fonts\ARIALI.TTF" />
+    <EmbeddedResource Include="Resources\Fonts\ARIBLK.TTF" />
+    <EmbeddedResource Include="Resources\Fonts\cour.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\courbd.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\courbi.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\couri.ttf" />
+  </ItemGroup>
+</Project>
